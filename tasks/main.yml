@@ -1,6 +1,6 @@
 #- name: include OS-specific variables
 #  include_vars: "{{ ansible_distribution }}.yml"
-  
+
 - include: "{{ ansible_os_family }}.yml"
   become: yes
 
@@ -15,7 +15,7 @@
     - "{{certbot_directory}}"
 
 - name: download certbot-auto
-  get_url: 
+  get_url:
     url: https://dl.eff.org/certbot-auto
     dest: "{{certbot_directory}}"
     mode: 0755
@@ -45,5 +45,5 @@
     day: '*'
     state: present
     user: root
-    job: "cd {{certbot_directory}} && ./certbot-auto -n renew && nginx -s reload"
+    job: "date >> /var/log/certbot.log && cd {{certbot_directory}} && ./certbot-auto -n renew >> /var/log/certbot.log 2>&1 && nginx -s reload"
   become: yes
